@@ -1,0 +1,28 @@
+library(readr)
+library(ggplot2)
+library(dplyr)
+
+#data that we are going to analyze and submit
+test <- read_csv("test.csv")
+#data we used to manipulate and test out hypothesis
+training <- read_csv("train.csv")
+#this is how we want our submission to look like
+sample_data <- read_csv("sample_submission.csv")
+
+
+#combine the training and test data sets so that we can properly train our model.
+#the training set has the sale price of each property but the test set d/n (since
+#that is what we're trying to predict).
+
+#first add SalePrice variable to test set.
+#NOTE: this will create new data set with the new column as opposed to adding new
+#column to data set that already exists
+test2 <- as_tibble(data.frame(SalePrice = rep("None", nrow(test)), test[,]))
+#you need to convert the sale price into a numeric before combining data
+test2$SalePrice <- as.numeric(test2$SalePrice)
+str(training)
+str(test2)
+
+#before combining data sets you need to clean up both the test2 and training data sets
+#       1. test2 has 3 columns not in training: X1stFlrSF, X2ndFlrSF, X3SsnPorch
+#       2. in training those 3 parameters are known as: 1stFlrSF, 2ndFlrSF, 3SsnPorch
